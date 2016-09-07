@@ -135,6 +135,15 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, assign) BOOL showsSelectionIndex;
 
+
+/**
+ *  Determines whether or not the asset may be selected from a preview screen
+ *
+ *  By default a checkmark is shown for assets while in prieview. Set this property’s value to `NO`,
+ *  if you want to disable checkmark selection.
+ */
+@property (nonatomic, assign) BOOL showsPreviewSelection;
+
 /**
  *  The split view controller of the picker hierarchy. (read-only)
  *

@@ -77,6 +77,7 @@ NSString * const CTAssetsPickerDidDeselectAssetNotification = @"CTAssetsPickerDi
         _showsNumberOfAssets                = YES;
         _alwaysEnableDoneButton             = NO;
         _showsSelectionIndex                = NO;
+        _showsPreviewSelection              = YES;
         _defaultAssetCollection             = PHAssetCollectionSubtypeAny;
         
         [self initAssetCollectionSubtypes];
