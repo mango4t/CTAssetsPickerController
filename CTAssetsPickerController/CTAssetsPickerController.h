@@ -341,6 +341,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)assetsPickerController:(CTAssetsPickerController *)picker didUnhighlightAsset:(PHAsset *)asset;
 
 
+/**
+ *  Asks the delegate if it is allowed to go to a preview screen for the specified asset.
+ *
+ *  @param picker The controller object managing the assets picker interface.
+ *  @param asset  The asset being held during a longpress.
+ */
+- (BOOL)assetsPickerController:(CTAssetsPickerController *)picker allowPreviewTransitionForAsset:(PHAsset *)asset;
 
 
 /**
