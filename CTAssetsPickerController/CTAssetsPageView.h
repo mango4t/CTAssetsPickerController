@@ -30,6 +30,7 @@
 
 @property (nonatomic, strong, nullable) UIColor *pageBackgroundColor UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong, nullable) UIColor *fullscreenBackgroundColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong, nullable) UIColor *toolbarButtonTintColor UI_APPEARANCE_SELECTOR;
 
 - (void)enterFullscreen;
 - (void)exitFullscreen;

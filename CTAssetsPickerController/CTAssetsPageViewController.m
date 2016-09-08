@@ -116,7 +116,18 @@
 }
 
 
+-(void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
 
+    // need to update color after pageview moved to the view
+    if (self.pageView.toolbarButtonTintColor) {
+        self.playButton.tintColor = self.pageView.toolbarButtonTintColor;
+    }
+
+    if (self.pageView.toolbarButtonTintColor) {
+        self.pauseButton.tintColor = self.pageView.toolbarButtonTintColor;
+    }
+}
 #pragma mark - Setup
 
 - (void)setupViews
@@ -234,7 +245,7 @@
 
 - (PHAsset *)asset
 {
-    return ((CTAssetItemViewController *)self.viewControllers[0]).asset;
+    return ((CTAssetItemViewController *)self.viewControllers.firstObject).asset;
 }
 
 - (CTAssetsPickerController *)picker
