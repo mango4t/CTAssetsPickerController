@@ -24,6 +24,7 @@
  
  */
 
+#import "CTAssetsPickerController.h"
 #import "CTAssetsPageViewController.h"
 #import "CTAssetsPageView.h"
 #import "CTAssetItemViewController.h"
@@ -52,6 +53,10 @@
 
 @property (nonatomic, strong) UIBarButtonItem *playButton;
 @property (nonatomic, strong) UIBarButtonItem *pauseButton;
+
+@property (nonatomic, strong) UIBarButtonItem *doneButton;
+
+@property (nonatomic) NSString *doneButtonTitle;
 
 @end
 
@@ -144,6 +149,17 @@
         
         self.pauseButton = pauseButton;
     }
+
+    if (!self.doneButton && self.doneButtonTitle)
+    {
+        self.doneButton =
+        [[UIBarButtonItem alloc] initWithTitle:self.doneButtonTitle
+                                         style:UIBarButtonItemStyleDone
+                                        target:self
+                                        action:@selector(finishPickingAsset)];
+
+        self.navigationItem.rightBarButtonItem = self.doneButton;
+    }
 }
 
 
@@ -221,6 +237,10 @@
     return ((CTAssetItemViewController *)self.viewControllers[0]).asset;
 }
 
+- (CTAssetsPickerController *)picker
+{
+    return (CTAssetsPickerController *)self.splitViewController.parentViewController;
+}
 
 #pragma mark - Page view controller data source
 
@@ -419,4 +439,11 @@
 }
 
 
+#pragma mark Done button
+
+-(void)finishPickingAsset {
+    PHAsset *asset = [self asset];
+    [self.picker selectAsset:asset];
+    [self.picker performSelector:@selector(finishPickingAssets:) withObject:self];
+}
 @end

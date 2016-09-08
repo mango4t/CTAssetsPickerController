@@ -145,6 +145,14 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL showsPreviewSelection;
 
 /**
+ *  An optional title for the done button in preview
+ *
+ *  You can override the title of "Done" button by this value.
+ *  By default the value is nil.
+ */
+@property (nonatomic, copy) NSString *previewDoneButtonTitle;
+
+/**
  *  The split view controller of the picker hierarchy. (read-only)
  *
  *  This property contains the child split view controller of the picker.
