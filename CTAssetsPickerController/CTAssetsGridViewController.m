@@ -566,11 +566,14 @@ NSString * const CTAssetsGridViewFooterIdentifier = @"CTAssetsGridViewFooterIden
         [self.collectionView.collectionViewLayout layoutAttributesForItemAtIndexPath:indexPath];
         
         CGSize targetSize = [self.picker imageSizeForContainerSize:attributes.size];
-        
-        [self.imageManager startCachingImagesForAssets:@[asset]
-                                            targetSize:targetSize
-                                           contentMode:PHImageContentModeAspectFill
-                                               options:self.picker.thumbnailRequestOptions];
+
+        dispatch_queue_t backgroundQueue = dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0);
+        dispatch_async(backgroundQueue, ^{
+            [self.imageManager startCachingImagesForAssets:@[asset]
+                                                targetSize:targetSize
+                                               contentMode:PHImageContentModeAspectFill
+                                                   options:self.picker.thumbnailRequestOptions];
+        });
     }
 }
 
