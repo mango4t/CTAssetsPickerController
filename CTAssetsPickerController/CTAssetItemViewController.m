@@ -104,13 +104,23 @@
     [self.scrollView updateConstraintsIfNeeded];
 }
 
+-(void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+
+    [self.scrollView setNeedsUpdateConstraints];
+    [self.scrollView updateConstraintsIfNeeded];
+}
+
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
 
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self.scrollView updateZoomScalesAndZoom:YES];
-    } completion:nil];
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        [self.scrollView setNeedsUpdateConstraints];
+        [self.scrollView updateConstraintsIfNeeded];
+    }];
 }
 
 
