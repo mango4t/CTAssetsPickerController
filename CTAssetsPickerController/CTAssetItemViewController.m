@@ -382,8 +382,8 @@
 
 - (BOOL)assetScrollView:(CTAssetScrollView *)scrollView shouldSelectAsset:(PHAsset *)asset
 {
-    if ([self.picker.delegate respondsToSelector:@selector(assetsPickerController:shouldSelectAsset:)])
-        return [self.picker.delegate assetsPickerController:self.picker shouldSelectAsset:asset];
+    if ([self.picker.delegate respondsToSelector:@selector(assetsPickerController:shouldSelectAsset:selectedItemView:)])
+        return [self.picker.delegate assetsPickerController:self.picker shouldSelectAsset:asset selectedItemView:scrollView];
     else
         return YES;
 }

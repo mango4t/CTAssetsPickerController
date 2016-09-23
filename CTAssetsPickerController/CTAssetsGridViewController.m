@@ -747,8 +747,8 @@ NSString * const CTAssetsGridViewFooterIdentifier = @"CTAssetsGridViewFooterIden
     
     if (!cell.isEnabled)
         return NO;
-    else if ([self.picker.delegate respondsToSelector:@selector(assetsPickerController:shouldSelectAsset:)])
-        return [self.picker.delegate assetsPickerController:self.picker shouldSelectAsset:asset];
+    else if ([self.picker.delegate respondsToSelector:@selector(assetsPickerController:shouldSelectAsset:selectedItemView:)])
+        return [self.picker.delegate assetsPickerController:self.picker shouldSelectAsset:asset selectedItemView:cell];
     else
         return YES;
 }
