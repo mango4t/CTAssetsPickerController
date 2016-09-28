@@ -286,7 +286,20 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @see assetsPickerController:shouldDeselectAsset:
  */
-- (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldSelectAsset:(PHAsset *)asset selectedItemView:(UIView*)selectedItemView;
+- (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldSelectAsset:(PHAsset *)asset;
+
+/**
+ *  Asks the delegate if the specified asset should be selected.
+ *
+ *  @param picker The controller object managing the assets picker interface.
+ *  @param asset  The asset to be selected.
+ *  @param selectedItemView The item view to be clicked
+ *
+ *  @return `YES` if the asset should be selected or `NO` if it should not.
+ *
+ *  @see assetsPickerController:shouldDeselectAsset:
+ */
+- (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldSelectAsset:(PHAsset *)asset selectedItemView:(nullable UIView *)selectedItemView;
 
 /**
  *  Tells the delegate that the asset was selected.
