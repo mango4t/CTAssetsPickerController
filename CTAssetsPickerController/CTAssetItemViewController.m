@@ -96,30 +96,37 @@
     [self cancelRequestAsset];
 }
 
+-(void)updateScroolViewConstraints {
+    [self.scrollView setNeedsUpdateConstraints];
+    [self.scrollView updateConstraintsIfNeeded];
+}
+
 - (void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
-    
-    [self.scrollView setNeedsUpdateConstraints];
-    [self.scrollView updateConstraintsIfNeeded];
+
+    [self updateScroolViewConstraints];
 }
 
 -(void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
 
-    [self.scrollView setNeedsUpdateConstraints];
-    [self.scrollView updateConstraintsIfNeeded];
+    [self updateScroolViewConstraints];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
+    BOOL newSizeSmaller = size.width < self.view.bounds.size.width || size.height < self.view.bounds.size.height;
+
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
 
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self.scrollView updateZoomScalesAndZoom:YES];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [self.scrollView setNeedsUpdateConstraints];
-        [self.scrollView updateConstraintsIfNeeded];
+        [self updateScroolViewConstraints];
+        if (newSizeSmaller) {
+            [self performSelector:@selector(updateScroolViewConstraints) withObject:nil afterDelay:0.2];
+        }
     }];
 }
 
