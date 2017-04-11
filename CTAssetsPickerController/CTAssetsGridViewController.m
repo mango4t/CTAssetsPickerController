@@ -556,6 +556,9 @@ NSString * const CTAssetsGridViewFooterIdentifier = @"CTAssetsGridViewFooterIden
 
 - (void)startCachingThumbnailsForIndexPaths:(NSArray *)indexPaths
 {
+
+    NSMutableDictionary <NSString*, NSMutableArray <PHAsset*> *> *sizeAssetMap = [NSMutableDictionary dictionaryWithCapacity:indexPaths.count];
+
     for (NSIndexPath *indexPath in indexPaths)
     {
         PHAsset *asset = [self assetAtIndexPath:indexPath];
@@ -567,14 +570,21 @@ NSString * const CTAssetsGridViewFooterIdentifier = @"CTAssetsGridViewFooterIden
         
         CGSize targetSize = [self.picker imageSizeForContainerSize:attributes.size];
 
-        dispatch_queue_t backgroundQueue = dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0);
-        dispatch_async(backgroundQueue, ^{
-            [self.imageManager startCachingImagesForAssets:@[asset]
+        NSMutableArray <PHAsset*> *assets = sizeAssetMap[NSStringFromCGSize(targetSize)] ?: [NSMutableArray arrayWithCapacity:indexPaths.count];
+        [assets addObject:asset];
+        sizeAssetMap[NSStringFromCGSize(targetSize)] = assets;
+    }
+
+    dispatch_queue_t backgroundQueue = dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0);
+    dispatch_async(backgroundQueue, ^{
+        [sizeAssetMap enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSMutableArray<PHAsset *> * _Nonnull obj, BOOL * _Nonnull stop) {
+            CGSize targetSize = CGSizeFromString(key);
+            [self.imageManager startCachingImagesForAssets:obj
                                                 targetSize:targetSize
                                                contentMode:PHImageContentModeAspectFill
                                                    options:self.picker.thumbnailRequestOptions];
-        });
-    }
+        }];
+    });
 }
 
 - (void)stopCachingThumbnailsForIndexPaths:(NSArray *)indexPaths
@@ -711,15 +721,21 @@ NSString * const CTAssetsGridViewFooterIdentifier = @"CTAssetsGridViewFooterIden
     NSInteger tag = cell.tag + 1;
     cell.tag = tag;
 
-    [self.imageManager ctassetsPickerRequestImageForAsset:asset
-                                 targetSize:targetSize
-                                contentMode:PHImageContentModeAspectFill
-                                    options:self.picker.thumbnailRequestOptions
-                              resultHandler:^(UIImage *image, NSDictionary *info){
-                                  // Only update the image if the cell tag hasn't changed. Otherwise, the cell has been re-used.
-                                  if (cell.tag == tag)
-                                      [(CTAssetThumbnailView *)cell.backgroundView bind:image asset:asset];
-                              }];
+    dispatch_queue_t backgroundQueue = dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0);
+    dispatch_async(backgroundQueue, ^{
+        [self.imageManager ctassetsPickerRequestImageForAsset:asset
+                                                   targetSize:targetSize
+                                                  contentMode:PHImageContentModeAspectFill
+                                                      options:self.picker.thumbnailRequestOptions
+                                                resultHandler:^(UIImage *image, NSDictionary *info){
+                                                    // Only update the image if the cell tag hasn't changed. Otherwise, the cell has been re-used.
+                                                    if (cell.tag == tag) {
+                                                        dispatch_async(dispatch_get_main_queue(), ^{
+                                                            [(CTAssetThumbnailView *)cell.backgroundView bind:image asset:asset];
+                                                        });
+                                                    }
+                                                }];
+    });
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath

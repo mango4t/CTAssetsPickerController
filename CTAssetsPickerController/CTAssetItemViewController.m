@@ -201,27 +201,32 @@
     
     CGSize targetSize = [self targetImageSize];
     PHImageRequestOptions *options = [self imageRequestOptions];
-    
-    self.imageRequestID =
-    [self.imageManager ctassetsPickerRequestImageForAsset:self.asset
-                                 targetSize:targetSize
-                                contentMode:PHImageContentModeAspectFit
-                                    options:options
-                              resultHandler:^(UIImage *image, NSDictionary *info) {
 
-                                  // this image is set for transition animation
-                                  self.image = image;
-                                  
-                                  dispatch_async(dispatch_get_main_queue(), ^{
-                                  
-                                      NSError *error = info[PHImageErrorKey];
-                                      
-                                      if (error)
-                                          [self showRequestImageError:error title:nil];
-                                      else
-                                          [self.scrollView bind:self.asset image:image requestInfo:info];
-                                  });
-                              }];
+    dispatch_queue_t backgroundQueue = dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0);
+    dispatch_async(backgroundQueue, ^{
+        PHImageRequestID imageRequestID =
+        [self.imageManager ctassetsPickerRequestImageForAsset:self.asset
+                                                   targetSize:targetSize
+                                                  contentMode:PHImageContentModeAspectFit
+                                                      options:options
+                                                resultHandler:^(UIImage *image, NSDictionary *info) {
+                                                    dispatch_async(dispatch_get_main_queue(), ^{
+                                                        // this image is set for transition animation
+                                                        self.image = image;
+
+                                                        NSError *error = info[PHImageErrorKey];
+
+                                                        if (error)
+                                                            [self showRequestImageError:error title:nil];
+                                                        else
+                                                            [self.scrollView bind:self.asset image:image requestInfo:info];
+                                                    });
+                                                }];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.imageRequestID = imageRequestID;
+        });
+    });
 }
 
 - (CGSize)targetImageSize

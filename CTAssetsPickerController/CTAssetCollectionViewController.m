@@ -436,19 +436,24 @@
     {
         CTAssetThumbnailView *thumbnailView = [cell.thumbnailStacks thumbnailAtIndex:index];
         thumbnailView.hidden = (assets.count > 0) ? YES : NO;
-        
-        if (index < assets.count)
-        {
-            PHAsset *asset = assets[index];
-            [self.imageManager ctassetsPickerRequestImageForAsset:asset
-                                         targetSize:targetSize
-                                        contentMode:PHImageContentModeAspectFill
-                                            options:self.picker.thumbnailRequestOptions
-                                      resultHandler:^(UIImage *image, NSDictionary *info){
-                                          [thumbnailView setHidden:NO];
-                                          [thumbnailView bind:image assetCollection:collection];
-                                      }];
-        }
+
+        dispatch_queue_t backgroundQueue = dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0);
+        dispatch_async(backgroundQueue, ^{
+            if (index < assets.count)
+            {
+                PHAsset *asset = assets[index];
+                [self.imageManager ctassetsPickerRequestImageForAsset:asset
+                                                           targetSize:targetSize
+                                                          contentMode:PHImageContentModeAspectFill
+                                                              options:self.picker.thumbnailRequestOptions
+                                                        resultHandler:^(UIImage *image, NSDictionary *info){
+                                                            dispatch_async(dispatch_get_main_queue(), ^{
+                                                                [thumbnailView setHidden:NO];
+                                                                [thumbnailView bind:image assetCollection:collection];
+                                                            });
+                                                        }];
+            }
+        });
     }
 }
 
