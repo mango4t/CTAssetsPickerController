@@ -37,5 +37,17 @@
 @property (nonatomic, weak, nullable) UIFont *font UI_APPEARANCE_SELECTOR DEPRECATED_MSG_ATTRIBUTE("Use setTextAttributes: of CTAssetSelectionLabel instead.");
 @property (nonatomic, weak, nullable) UIColor *textColor UI_APPEARANCE_SELECTOR DEPRECATED_MSG_ATTRIBUTE("Use setTextAttributes: of CTAssetSelectionLabel instead.");
 
+/**
+ *  To set the outer corner radius of label.
+ *
+ *  @param cornerRadius The radius to use when drawing outer rounded corners for selection border.
+ */
+- (void)setOuterCornerRadius:(CGFloat)cornerRadius UI_APPEARANCE_SELECTOR;
 
+/**
+ *  To set the inner corner radius of label.
+ *
+ *  @param cornerRadius The radius to use when drawing outer inner corners for selection border.
+ */
+- (void)setInnerCornerRadius:(CGFloat)cornerRadius UI_APPEARANCE_SELECTOR;
 @end

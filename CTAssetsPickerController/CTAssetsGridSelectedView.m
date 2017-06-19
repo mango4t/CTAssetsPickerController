@@ -44,7 +44,9 @@
 
 
 
-@implementation CTAssetsGridSelectedView
+@implementation CTAssetsGridSelectedView {
+    CALayer *_innerLayer;
+}
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -73,6 +75,19 @@
     self.selectionIndexLabel = selectionIndexLabel;
     
     [self addSubview:self.selectionIndexLabel];
+
+    _innerLayer = [CALayer new];
+    _innerLayer.borderColor = CTAssetsGridSelectedViewTintColor.CGColor;
+    _innerLayer.frame = self.layer.bounds;
+    [_innerLayer removeFromSuperlayer];
+    [self.layer addSublayer:_innerLayer];
+    
+}
+
+-(void)layoutSubviews {
+    [super layoutSubviews];
+
+    _innerLayer.frame = self.layer.bounds;
 }
 
 
@@ -122,14 +137,25 @@
 - (void)setBorderWidth:(CGFloat)borderWidth
 {
     self.layer.borderWidth = borderWidth;
+    _innerLayer.borderWidth = borderWidth;
 }
 
 - (void)setTintColor:(UIColor *)tintColor
 {
     UIColor *color = (tintColor) ? tintColor : CTAssetsGridSelectedViewTintColor;
     self.layer.borderColor = color.CGColor;
+    _innerLayer.borderColor = color.CGColor;
 }
 
+- (void)setOuterCornerRadius:(CGFloat)cornerRadius
+{
+    self.layer.cornerRadius = cornerRadius;
+}
+
+- (void)setInnerCornerRadius:(CGFloat)cornerRadius
+{
+    _innerLayer.cornerRadius = cornerRadius;
+}
 
 #pragma mark - Accessibility Label
 
