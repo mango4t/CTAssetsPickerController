@@ -47,6 +47,7 @@
 @implementation CTAssetsGridSelectedView {
     CALayer *_innerLayer;
     UIView *_backgroundView;
+    BOOL _didSetupConstraints;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -90,10 +91,18 @@
 -(void)layoutSubviews {
     [super layoutSubviews];
 
-    _backgroundView.layer.frame = self.layer.bounds;
     _innerLayer.frame = self.layer.bounds;
 }
 
+-(void)updateConstraints {
+    if (!_didSetupConstraints) {
+        [_backgroundView autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero];
+
+        _didSetupConstraints = YES;
+    }
+
+    [super updateConstraints];
+}
 
 #pragma mark - Accessors
 
