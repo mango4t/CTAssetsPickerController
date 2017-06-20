@@ -46,6 +46,7 @@
 
 @implementation CTAssetsGridSelectedView {
     CALayer *_innerLayer;
+    UIView *_backgroundView;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -64,9 +65,18 @@
 
 - (void)setupViews
 {
-    self.backgroundColor = CTAssetsGridSelectedViewBackgroundColor;
-    self.layer.borderColor = CTAssetsGridSelectedViewTintColor.CGColor;
-    
+    _backgroundView = [UIView newAutoLayoutView];
+    [self addSubview:_backgroundView];
+
+    _backgroundView.backgroundColor = CTAssetsGridSelectedViewBackgroundColor;
+    _backgroundView.layer.borderColor = CTAssetsGridSelectedViewTintColor.CGColor;
+
+    _innerLayer = [CALayer new];
+    _innerLayer.borderColor = CTAssetsGridSelectedViewTintColor.CGColor;
+    _innerLayer.frame = _backgroundView.layer.bounds;
+    [_innerLayer removeFromSuperlayer];
+    [_backgroundView.layer addSublayer:_innerLayer];
+
     CTAssetCheckmark *checkmark = [CTAssetCheckmark newAutoLayoutView];
     self.checkmark = checkmark;
     [self addSubview:checkmark];
@@ -75,18 +85,12 @@
     self.selectionIndexLabel = selectionIndexLabel;
     
     [self addSubview:self.selectionIndexLabel];
-
-    _innerLayer = [CALayer new];
-    _innerLayer.borderColor = CTAssetsGridSelectedViewTintColor.CGColor;
-    _innerLayer.frame = self.layer.bounds;
-    [_innerLayer removeFromSuperlayer];
-    [self.layer addSublayer:_innerLayer];
-    
 }
 
 -(void)layoutSubviews {
     [super layoutSubviews];
 
+    _backgroundView.layer.frame = self.layer.bounds;
     _innerLayer.frame = self.layer.bounds;
 }
 
@@ -120,36 +124,36 @@
 
 - (UIColor *)selectedBackgroundColor
 {
-    return self.backgroundColor;
+    return _backgroundView.backgroundColor;
 }
 
 - (void)setSelectedBackgroundColor:(UIColor *)backgroundColor
 {
     UIColor *color = (backgroundColor) ? backgroundColor : CTAssetsGridSelectedViewBackgroundColor;
-    self.backgroundColor = color;
+    _backgroundView.backgroundColor = color;
 }
 
 - (CGFloat)borderWidth
 {
-    return self.layer.borderWidth;
+    return _backgroundView.layer.borderWidth;
 }
 
 - (void)setBorderWidth:(CGFloat)borderWidth
 {
-    self.layer.borderWidth = borderWidth;
+    _backgroundView.layer.borderWidth = borderWidth;
     _innerLayer.borderWidth = borderWidth;
 }
 
 - (void)setTintColor:(UIColor *)tintColor
 {
     UIColor *color = (tintColor) ? tintColor : CTAssetsGridSelectedViewTintColor;
-    self.layer.borderColor = color.CGColor;
+    _backgroundView.layer.borderColor = color.CGColor;
     _innerLayer.borderColor = color.CGColor;
 }
 
 - (void)setOuterCornerRadius:(CGFloat)cornerRadius
 {
-    self.layer.cornerRadius = cornerRadius;
+    _backgroundView.layer.cornerRadius = cornerRadius;
 }
 
 - (void)setInnerCornerRadius:(CGFloat)cornerRadius
