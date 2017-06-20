@@ -381,6 +381,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 /**
+ *  Asks the delegate for an appropriate title string for specified selected assets count.
+ *
+ *  @param picker The controller object managing the assets picker interface.
+ *  @param assetsCount  Selected assets count. 
+ */
+- (NSString*)assetsPickerController:(CTAssetsPickerController *)picker titleForSelectedAssetsCount:(NSUInteger)assetsCount;
+
+
+/**
  *  @name Notifications
  */
 
