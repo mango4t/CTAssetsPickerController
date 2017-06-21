@@ -162,4 +162,26 @@
     [super updateConstraints];
 }
 
+#pragma mark Image setters
+
+-(UIImage*)getShadowImage {
+    return self.shadowImageView.image;
+}
+
+-(void)setShadowImage:(UIImage *)shadowImage {
+    self.shadowImageView.image = shadowImage;
+    [self setNeedsLayout];
+    [self layoutIfNeeded];
+}
+
+-(UIImage*)getCheckmarkImage {
+    return self.checkmarkImageView.image;
+}
+
+-(void)setCheckmarkImage:(UIImage *)checkmarkImage {
+    self.checkmarkImageView.image = checkmarkImage;
+    [self setNeedsLayout];
+    [self layoutIfNeeded];
+}
+
 @end

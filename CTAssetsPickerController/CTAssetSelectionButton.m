@@ -119,4 +119,13 @@
 }
 
 
+#pragma mark Appearance
+
+-(UIImage*)getBackgroundImage {
+    return self.backgroundView.image;
+}
+
+-(void)setBackgroundImage:(UIImage *)backgroundImage {
+    self.backgroundView.image = backgroundImage;
+}
 @end

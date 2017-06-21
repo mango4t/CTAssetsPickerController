@@ -28,4 +28,6 @@
 
 @interface CTAssetSelectionButton : UIControl
 
+@property (nonatomic) UIImage *backgroundImage UI_APPEARANCE_SELECTOR;
+
 @end

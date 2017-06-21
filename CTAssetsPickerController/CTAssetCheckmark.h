@@ -47,4 +47,6 @@
  */
 - (void)setMargin:(CGFloat)margin forVerticalEdge:(NSLayoutAttribute)edgeX horizontalEdge:(NSLayoutAttribute)edgeY UI_APPEARANCE_SELECTOR;
 
+@property (nonatomic) UIImage *shadowImage UI_APPEARANCE_SELECTOR;
+@property (nonatomic) UIImage *checkmarkImage UI_APPEARANCE_SELECTOR;
 @end
