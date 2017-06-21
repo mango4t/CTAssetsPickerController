@@ -338,17 +338,23 @@
     [center addObserver:self
                selector:@selector(assetScrollViewPlayerWillPause:)
                    name:CTAssetScrollViewPlayerWillPauseNotification
-                 object:nil];    
+                 object:nil];
+
+    [center addObserver:self
+               selector:@selector(assetsPickerSelectedAssetsDidChange:)
+                   name:CTAssetsPickerSelectedAssetsDidChangeNotification
+                 object:nil];
 }
 
 - (void)removeNotificationObserver
 {
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    
+
     [center removeObserver:self name:CTAssetScrollViewDidTapNotification object:nil];
     [center removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
     [center removeObserver:self name:CTAssetScrollViewPlayerWillPlayNotification object:nil];
     [center removeObserver:self name:CTAssetScrollViewPlayerWillPauseNotification object:nil];
+    [center removeObserver:self name:CTAssetsPickerSelectedAssetsDidChangeNotification object:nil];
 }
 
 
@@ -379,6 +385,10 @@
     [self replaceToolbarButton:self.playButton];
 }
 
+- (void)assetsPickerSelectedAssetsDidChange:(NSNotification *)notification
+{
+    [self updateTitle:self.pageIndex + 1];
+}
 
 #pragma mark - Toggle fullscreen
 
