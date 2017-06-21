@@ -114,6 +114,7 @@
 {
     super.selected = selected;
     self.checkmark.hidden = !selected;
+    self.backgroundView.hidden = selected;
     
     self.accessibilityLabel = (selected) ? CTAssetsPickerLocalizedString(@"Deselect", nil) : CTAssetsPickerLocalizedString(@"Select", nil);
 }
