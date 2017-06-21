@@ -492,6 +492,7 @@ NSString * const CTAssetsGridViewFooterIdentifier = @"CTAssetsGridViewFooterIden
         vc.picker = self.picker;
         vc.allowsSelection = self.picker.showsPreviewSelection;
         vc.doneButtonTitle = self.picker.previewDoneButtonTitle;
+        vc.doneButtonAlwaysEnabled = self.picker.previewDoneButtonAlwaysEnabled;
         vc.pageIndex = indexPath.item;
         
         [self.navigationController pushViewController:vc animated:YES];

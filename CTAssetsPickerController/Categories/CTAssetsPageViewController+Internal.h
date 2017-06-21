@@ -27,6 +27,7 @@
 @interface CTAssetsPageViewController (Internal)
 
 @property (nonatomic, assign) BOOL allowsSelection;
+@property (nonatomic, assign) BOOL doneButtonAlwaysEnabled;
 @property (nonatomic) NSString *doneButtonTitle;
 @property (nonatomic, weak) CTAssetsPickerController *picker;
 

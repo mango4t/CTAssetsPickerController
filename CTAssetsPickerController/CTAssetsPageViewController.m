@@ -56,6 +56,7 @@
 
 @property (nonatomic, strong) UIBarButtonItem *doneButton;
 
+@property (nonatomic, assign) BOOL doneButtonAlwaysEnabled;
 @property (nonatomic) NSString *doneButtonTitle;
 @property (nonatomic, weak) CTAssetsPickerController *picker;
 
@@ -89,6 +90,7 @@
         self.dataSource      = self;
         self.delegate        = self;
         self.allowsSelection = NO;
+        self.doneButtonAlwaysEnabled = YES;
         self.automaticallyAdjustsScrollViewInsets = NO;
     }
     
@@ -171,6 +173,9 @@
                                         action:@selector(finishPickingAsset)];
 
         self.navigationItem.rightBarButtonItem = self.doneButton;
+        if (!self.doneButtonAlwaysEnabled) {
+            self.doneButton.enabled = self.picker.selectedAssets.count > 0;
+        }
     }
 }
 
@@ -388,6 +393,7 @@
 - (void)assetsPickerSelectedAssetsDidChange:(NSNotification *)notification
 {
     [self updateTitle:self.pageIndex + 1];
+    self.doneButton.enabled = self.doneButtonAlwaysEnabled || self.picker.selectedAssets.count > 0;
 }
 
 #pragma mark - Toggle fullscreen
@@ -466,8 +472,10 @@
 #pragma mark Done button
 
 -(void)finishPickingAsset {
-    PHAsset *asset = [self asset];
-    [self.picker selectAsset:asset];
+    if (!self.allowsSelection) {
+        PHAsset *asset = [self asset];
+        [self.picker selectAsset:asset];
+    }
     [self.picker performSelector:@selector(finishPickingAssets:) withObject:self];
 }
 @end

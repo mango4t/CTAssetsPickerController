@@ -153,6 +153,14 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *previewDoneButtonTitle;
 
 /**
+ *  Override property for enabled behavior of done button in preview
+ *
+ *  You can override the behavior of "Done" button.
+ *  By default the value is YES. When set to NO, Done button is enabled only when there are selected assets.
+ */
+@property (nonatomic, copy) NSString *previewDoneButtonAlwaysEnabled;
+
+/**
  *  The split view controller of the picker hierarchy. (read-only)
  *
  *  This property contains the child split view controller of the picker.
