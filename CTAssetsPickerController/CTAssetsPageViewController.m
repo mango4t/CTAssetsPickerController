@@ -57,6 +57,7 @@
 @property (nonatomic, strong) UIBarButtonItem *doneButton;
 
 @property (nonatomic) NSString *doneButtonTitle;
+@property (nonatomic, weak) CTAssetsPickerController *picker;
 
 @end
 
@@ -178,6 +179,13 @@
 
 - (void)updateTitle:(NSInteger)index
 {
+    if ([self.picker.delegate respondsToSelector:@selector(assetsPickerController:titleForSelectedAssetsCount:)] && [self.picker.delegate respondsToSelector:@selector(assetsPickerController:allowDefaultTitleForAsset:)]) {
+        if (![self.picker.delegate assetsPickerController:self.picker allowDefaultTitleForAsset:self.assets[index - 1]]) {
+            self.title = [self.picker.delegate assetsPickerController:[self picker] titleForSelectedAssetsCount:self.picker.selectedAssets.count];
+            return;
+        }
+    }
+
     NSNumberFormatter *nf = [NSNumberFormatter new];
 
     NSInteger count = self.assets.count;
@@ -246,11 +254,6 @@
 - (PHAsset *)asset
 {
     return ((CTAssetItemViewController *)self.viewControllers.firstObject).asset;
-}
-
-- (CTAssetsPickerController *)picker
-{
-    return (CTAssetsPickerController *)self.splitViewController.parentViewController;
 }
 
 #pragma mark - Page view controller data source

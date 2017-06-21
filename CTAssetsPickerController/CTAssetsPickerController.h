@@ -390,6 +390,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 /**
+ *  Asks the delegate if it is allowed to display a default title for the specified asset.
+ *
+ *  @param picker The controller object managing the assets picker interface.
+ *  @param asset  The asset that is currently visible in preview mode (nil in grid mode).
+ */
+- (BOOL)assetsPickerController:(CTAssetsPickerController *)picker allowDefaultTitleForAsset:(nullable PHAsset *)asset;
+
+/**
  *  @name Notifications
  */
 

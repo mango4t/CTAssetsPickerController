@@ -335,7 +335,11 @@
 
 - (void)updateTitle:(NSArray *)selectedAssets
 {
-    if ([self isTopViewController] && selectedAssets.count > 0)
+    BOOL allowDefaultTitle = YES;
+    if ([self.picker.delegate respondsToSelector:@selector(assetsPickerController:allowDefaultTitleForAsset:)]) {
+        allowDefaultTitle = [self.picker.delegate assetsPickerController:self.picker allowDefaultTitleForAsset:nil];
+    }
+    if ([self isTopViewController] && (selectedAssets.count > 0 || !allowDefaultTitle))
         self.title = self.picker.selectedAssetsString;
     else
         [self resetTitle];

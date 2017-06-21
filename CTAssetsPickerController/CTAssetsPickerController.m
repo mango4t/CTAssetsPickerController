@@ -532,13 +532,13 @@ NSString * const CTAssetsPickerDidDeselectAssetNotification = @"CTAssetsPickerDi
 
 - (NSString *)selectedAssetsString
 {
-    if (self.selectedAssets.count == 0)
-        return nil;
-
     if ([self.delegate respondsToSelector:@selector(assetsPickerController:titleForSelectedAssetsCount:)]) {
         return [self.delegate assetsPickerController:self titleForSelectedAssetsCount:self.selectedAssets.count];
     }
-    
+
+    if (self.selectedAssets.count == 0)
+        return nil;
+
     NSPredicate *photoPredicate = [self predicateOfMediaType:PHAssetMediaTypeImage];
     NSPredicate *videoPredicate = [self predicateOfMediaType:PHAssetMediaTypeVideo];
     

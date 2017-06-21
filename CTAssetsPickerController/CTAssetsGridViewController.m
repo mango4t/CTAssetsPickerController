@@ -408,7 +408,12 @@ NSString * const CTAssetsGridViewFooterIdentifier = @"CTAssetsGridViewFooterIden
 
 - (void)updateTitle:(NSArray *)selectedAssets
 {
-    if (selectedAssets.count > 0)
+    BOOL allowDefaultTitle = YES;
+    if ([self.picker.delegate respondsToSelector:@selector(assetsPickerController:allowDefaultTitleForAsset:)]) {
+        allowDefaultTitle = [self.picker.delegate assetsPickerController:self.picker allowDefaultTitleForAsset:nil];
+    }
+
+    if (selectedAssets.count > 0 || !allowDefaultTitle)
         self.title = self.picker.selectedAssetsString;
     else
         self.title = self.assetCollection.localizedTitle;
@@ -484,6 +489,7 @@ NSString * const CTAssetsGridViewFooterIdentifier = @"CTAssetsGridViewFooterIden
         }
 
         CTAssetsPageViewController *vc = [[CTAssetsPageViewController alloc] initWithFetchResult:self.fetchResult];
+        vc.picker = self.picker;
         vc.allowsSelection = self.picker.showsPreviewSelection;
         vc.doneButtonTitle = self.picker.previewDoneButtonTitle;
         vc.pageIndex = indexPath.item;

@@ -28,5 +28,6 @@
 
 @property (nonatomic, assign) BOOL allowsSelection;
 @property (nonatomic) NSString *doneButtonTitle;
+@property (nonatomic, weak) CTAssetsPickerController *picker;
 
 @end
