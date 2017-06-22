@@ -40,6 +40,7 @@
 #import "NSIndexSet+CTAssetsPickerController.h"
 #import "NSBundle+CTAssetsPickerController.h"
 #import "PHImageManager+CTAssetsPickerController.h"
+#import "CTAssetsBackgroundQueue.h"
 
 
 
@@ -582,8 +583,7 @@ NSString * const CTAssetsGridViewFooterIdentifier = @"CTAssetsGridViewFooterIden
         sizeAssetMap[NSStringFromCGSize(targetSize)] = assets;
     }
 
-    dispatch_queue_t backgroundQueue = dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0);
-    dispatch_async(backgroundQueue, ^{
+    [CTBackgroundQueue addOperationWithBlock:^{
         [sizeAssetMap enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSMutableArray<PHAsset *> * _Nonnull obj, BOOL * _Nonnull stop) {
             CGSize targetSize = CGSizeFromString(key);
             [self.imageManager startCachingImagesForAssets:obj
@@ -591,7 +591,7 @@ NSString * const CTAssetsGridViewFooterIdentifier = @"CTAssetsGridViewFooterIden
                                                contentMode:PHImageContentModeAspectFill
                                                    options:self.picker.thumbnailRequestOptions];
         }];
-    });
+    }];
 }
 
 - (void)stopCachingThumbnailsForIndexPaths:(NSArray *)indexPaths
@@ -728,8 +728,7 @@ NSString * const CTAssetsGridViewFooterIdentifier = @"CTAssetsGridViewFooterIden
     NSInteger tag = cell.tag + 1;
     cell.tag = tag;
 
-    dispatch_queue_t backgroundQueue = dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0);
-    dispatch_async(backgroundQueue, ^{
+    [CTBackgroundQueue addOperationWithBlock:^{
         [self.imageManager ctassetsPickerRequestImageForAsset:asset
                                                    targetSize:targetSize
                                                   contentMode:PHImageContentModeAspectFill
@@ -742,7 +741,7 @@ NSString * const CTAssetsGridViewFooterIdentifier = @"CTAssetsGridViewFooterIden
                                                         });
                                                     }
                                                 }];
-    });
+    }];
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath

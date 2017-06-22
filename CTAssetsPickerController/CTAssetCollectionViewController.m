@@ -34,7 +34,7 @@
 #import "PHAsset+CTAssetsPickerController.h"
 #import "PHImageManager+CTAssetsPickerController.h"
 #import "NSBundle+CTAssetsPickerController.h"
-
+#import "CTAssetsBackgroundQueue.h"
 
 
 
@@ -441,8 +441,7 @@
         CTAssetThumbnailView *thumbnailView = [cell.thumbnailStacks thumbnailAtIndex:index];
         thumbnailView.hidden = (assets.count > 0) ? YES : NO;
 
-        dispatch_queue_t backgroundQueue = dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0);
-        dispatch_async(backgroundQueue, ^{
+        [CTBackgroundQueue addOperationWithBlock:^{
             if (index < assets.count)
             {
                 PHAsset *asset = assets[index];
@@ -457,7 +456,7 @@
                                                             });
                                                         }];
             }
-        });
+        }];
     }
 }
 

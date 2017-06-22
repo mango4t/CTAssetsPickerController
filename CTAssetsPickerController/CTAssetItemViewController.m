@@ -32,6 +32,7 @@
 #import "NSBundle+CTAssetsPickerController.h"
 #import "PHAsset+CTAssetsPickerController.h"
 #import "PHImageManager+CTAssetsPickerController.h"
+#import "CTAssetsBackgroundQueue.h"
 
 
 
@@ -202,8 +203,7 @@
     CGSize targetSize = [self targetImageSize];
     PHImageRequestOptions *options = [self imageRequestOptions];
 
-    dispatch_queue_t backgroundQueue = dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0);
-    dispatch_async(backgroundQueue, ^{
+    [CTBackgroundQueue addOperationWithBlock:^{
         PHImageRequestID imageRequestID =
         [self.imageManager ctassetsPickerRequestImageForAsset:self.asset
                                                    targetSize:targetSize
@@ -226,7 +226,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             self.imageRequestID = imageRequestID;
         });
-    });
+    }];
 }
 
 - (CGSize)targetImageSize
