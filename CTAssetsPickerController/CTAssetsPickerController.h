@@ -158,7 +158,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  You can override the behavior of "Done" button.
  *  By default the value is YES. When set to NO, Done button is enabled only when there are selected assets.
  */
-@property (nonatomic, copy) NSString *previewDoneButtonAlwaysEnabled;
+@property (nonatomic) BOOL previewDoneButtonAlwaysEnabled;
 
 /**
  *  The split view controller of the picker hierarchy. (read-only)
