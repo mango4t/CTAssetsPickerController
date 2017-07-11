@@ -131,6 +131,12 @@
         self.pauseButton.tintColor = self.pageView.toolbarButtonTintColor;
     }
 }
+
+-(void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [self setFullscreen:NO];
+}
+
 #pragma mark - Setup
 
 - (void)setupViews
