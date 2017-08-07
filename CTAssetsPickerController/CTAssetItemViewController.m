@@ -57,7 +57,9 @@
 
 
 
-@implementation CTAssetItemViewController
+@implementation CTAssetItemViewController {
+    CGRect _lastFrame;
+}
 
 + (CTAssetItemViewController *)assetItemViewControllerForAsset:(PHAsset *)asset
 {
@@ -111,6 +113,11 @@
 
 -(void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
+
+    if (CGRectGetWidth(_lastFrame) != CGRectGetWidth(self.view.frame)) {
+        [self.scrollView updateZoomScalesAndZoom:YES];
+    }
+    _lastFrame = self.view.frame;
 
     [self updateScroolViewConstraints];
 }
