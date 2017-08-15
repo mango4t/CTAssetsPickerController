@@ -44,6 +44,7 @@
 NSString * const CTAssetsPickerSelectedAssetsDidChangeNotification = @"CTAssetsPickerSelectedAssetsDidChangeNotification";
 NSString * const CTAssetsPickerDidSelectAssetNotification = @"CTAssetsPickerDidSelectAssetNotification";
 NSString * const CTAssetsPickerDidDeselectAssetNotification = @"CTAssetsPickerDidDeselectAssetNotification";
+NSString * const CTAssetsPickerDisplayAssetFullsizePreviewNotification = @"CTAssetsPickerDisplayAssetFullsizePreviewNotification";
 
 
 
@@ -470,6 +471,12 @@ NSString * const CTAssetsPickerDidDeselectAssetNotification = @"CTAssetsPickerDi
                                                         object:sender];
 }
 
+- (void)postDisplayAssetFullsizePreviewNotification:(id)sender
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:CTAssetsPickerDisplayAssetFullsizePreviewNotification
+                                                        object:sender];
+}
+
 
 #pragma mark - Accessors
 
@@ -519,6 +526,13 @@ NSString * const CTAssetsPickerDidDeselectAssetNotification = @"CTAssetsPickerDi
 {
     [self removeObjectFromSelectedAssetsAtIndex:[self.selectedAssets indexOfObject:asset]];
     [self postDidDeselectAssetNotification:asset];
+}
+
+
+#pragma mark - fullsize preview
+
+- (void)showFullsizePreviewForAsset:(PHAsset *)asset {
+    [self postDisplayAssetFullsizePreviewNotification:asset];
 }
 
 

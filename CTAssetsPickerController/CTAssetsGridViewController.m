@@ -274,6 +274,11 @@ NSString * const CTAssetsGridViewFooterIdentifier = @"CTAssetsGridViewFooterIden
                selector:@selector(assetsPickerDidDeselectAsset:)
                    name:CTAssetsPickerDidDeselectAssetNotification
                  object:nil];
+
+    [center addObserver:self
+               selector:@selector(assetsPickerShouldDisplayAssetFullsizePreview:)
+                   name:CTAssetsPickerDisplayAssetFullsizePreviewNotification
+                 object:nil];
 }
 
 - (void)removeNotificationObserver
@@ -283,6 +288,7 @@ NSString * const CTAssetsGridViewFooterIdentifier = @"CTAssetsGridViewFooterIden
     [center removeObserver:self name:CTAssetsPickerSelectedAssetsDidChangeNotification object:nil];
     [center removeObserver:self name:CTAssetsPickerDidSelectAssetNotification object:nil];
     [center removeObserver:self name:CTAssetsPickerDidDeselectAssetNotification object:nil];
+    [center removeObserver:self name:CTAssetsPickerDisplayAssetFullsizePreviewNotification object:nil];
 }
 
 
@@ -450,6 +456,28 @@ NSString * const CTAssetsGridViewFooterIdentifier = @"CTAssetsGridViewFooterIden
 }
 
 
+
+#pragma mark - Fullsize transition notifications
+
+- (void)assetsPickerShouldDisplayAssetFullsizePreview:(NSNotification *)notification
+{
+    PHAsset *asset = (PHAsset *)notification.object;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.fetchResult indexOfObject:asset] inSection:0];
+
+    if ([self.navigationController.topViewController isKindOfClass:[CTAssetsPageViewController class]]) {
+        CTAssetsPageViewController *vc = (CTAssetsPageViewController*)self.navigationController.topViewController;
+        vc.picker = self.picker;
+        vc.allowsSelection = self.picker.showsPreviewSelection;
+        vc.doneButtonTitle = self.picker.previewDoneButtonTitle;
+        vc.doneButtonAlwaysEnabled = self.picker.previewDoneButtonAlwaysEnabled;
+        vc.pageIndex = indexPath.item;
+    } else {
+        [self pushPageViewControllerForAsset:asset atIndexPath:indexPath];
+    }
+}
+
+
+
 #pragma mark - Update Selection Order Labels
 
 - (void)updateSelectionOrderLabels
@@ -476,6 +504,21 @@ NSString * const CTAssetsGridViewFooterIdentifier = @"CTAssetsGridViewFooterIden
 
 #pragma mark - Push assets page view controller
 
+- (void)pushPageViewControllerForAsset:(PHAsset*)asset atIndexPath:(NSIndexPath*)indexPath {
+    if ([self.picker.delegate respondsToSelector:@selector(assetsPickerController:allowPreviewTransitionForAsset:)] && ![self.picker.delegate assetsPickerController:self.picker allowPreviewTransitionForAsset:asset]) {
+        return;
+    }
+
+    CTAssetsPageViewController *vc = [[CTAssetsPageViewController alloc] initWithFetchResult:self.fetchResult];
+    vc.picker = self.picker;
+    vc.allowsSelection = self.picker.showsPreviewSelection;
+    vc.doneButtonTitle = self.picker.previewDoneButtonTitle;
+    vc.doneButtonAlwaysEnabled = self.picker.previewDoneButtonAlwaysEnabled;
+    vc.pageIndex = indexPath.item;
+
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
 - (void)pushPageViewController:(UILongPressGestureRecognizer *)longPress
 {
     if (longPress.state == UIGestureRecognizerStateBegan)
@@ -485,18 +528,7 @@ NSString * const CTAssetsGridViewFooterIdentifier = @"CTAssetsGridViewFooterIden
 
         PHAsset *asset = [self assetAtIndexPath:indexPath];
 
-        if ([self.picker.delegate respondsToSelector:@selector(assetsPickerController:allowPreviewTransitionForAsset:)] && ![self.picker.delegate assetsPickerController:self.picker allowPreviewTransitionForAsset:asset]) {
-            return;
-        }
-
-        CTAssetsPageViewController *vc = [[CTAssetsPageViewController alloc] initWithFetchResult:self.fetchResult];
-        vc.picker = self.picker;
-        vc.allowsSelection = self.picker.showsPreviewSelection;
-        vc.doneButtonTitle = self.picker.previewDoneButtonTitle;
-        vc.doneButtonAlwaysEnabled = self.picker.previewDoneButtonAlwaysEnabled;
-        vc.pageIndex = indexPath.item;
-        
-        [self.navigationController pushViewController:vc animated:YES];
+        [self pushPageViewControllerForAsset:asset atIndexPath:indexPath];
     }
 }
 

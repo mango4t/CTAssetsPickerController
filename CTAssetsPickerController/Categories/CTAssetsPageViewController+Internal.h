@@ -32,3 +32,5 @@
 @property (nonatomic, weak) CTAssetsPickerController *picker;
 
 @end
+
+extern NSString * const CTAssetsPickerDisplayAssetFullsizePreviewNotification;

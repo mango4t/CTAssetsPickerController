@@ -190,6 +190,13 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)deselectAsset:(PHAsset *)asset;
 
+/**
+ *  Shows full asset view in the picker.
+ *
+ *  @param asset The asset to be displayed in full size.
+ */
+- (void)showFullsizePreviewForAsset:(PHAsset *)asset;
+
 @end
 
 
