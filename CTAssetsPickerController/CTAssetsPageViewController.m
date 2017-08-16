@@ -478,6 +478,8 @@
 #pragma mark Done button
 
 -(void)finishPickingAsset {
+    [((CTAssetItemViewController *)self.viewControllers[0]) pauseAsset:[self asset]];
+
     if (!self.allowsSelection) {
         PHAsset *asset = [self asset];
         [self.picker selectAsset:asset];
