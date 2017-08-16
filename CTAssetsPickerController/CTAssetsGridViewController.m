@@ -526,6 +526,9 @@ NSString * const CTAssetsGridViewFooterIdentifier = @"CTAssetsGridViewFooterIden
         CGPoint point           = [longPress locationInView:self.collectionView];
         NSIndexPath *indexPath  = [self.collectionView indexPathForItemAtPoint:point];
 
+        if (indexPath == nil) {
+            return;
+        }
         PHAsset *asset = [self assetAtIndexPath:indexPath];
 
         [self pushPageViewControllerForAsset:asset atIndexPath:indexPath];
