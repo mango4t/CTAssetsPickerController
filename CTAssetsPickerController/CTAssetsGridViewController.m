@@ -171,6 +171,9 @@ NSString * const CTAssetsGridViewFooterIdentifier = @"CTAssetsGridViewFooterIden
 - (void)setupViews
 {
     self.collectionView.backgroundColor = [UIColor colorWithWhite:0 alpha:0];
+    if (@available(iOS 11.0, *)) {
+        [self.collectionView setContentInsetAdjustmentBehavior:UIScrollViewContentInsetAdjustmentAlways];
+    }
     CTAssetsGridView *gridView = [CTAssetsGridView new];
     [self.view insertSubview:gridView atIndex:0];
     [self.view setNeedsUpdateConstraints];
