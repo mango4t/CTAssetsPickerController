@@ -620,14 +620,14 @@ NSString * const CTAssetsGridViewFooterIdentifier = @"CTAssetsGridViewFooterIden
         [assets addObject:asset];
         sizeAssetMap[NSStringFromCGSize(targetSize)] = assets;
     }
-
+    PHImageRequestOptions *options = self.picker.thumbnailRequestOptions;
     [CTBackgroundQueue addOperationWithBlock:^{
         [sizeAssetMap enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSMutableArray<PHAsset *> * _Nonnull obj, BOOL * _Nonnull stop) {
             CGSize targetSize = CGSizeFromString(key);
             [self.imageManager startCachingImagesForAssets:obj
                                                 targetSize:targetSize
                                                contentMode:PHImageContentModeAspectFill
-                                                   options:self.picker.thumbnailRequestOptions];
+                                                   options:options];
         }];
     }];
 }
@@ -765,12 +765,12 @@ NSString * const CTAssetsGridViewFooterIdentifier = @"CTAssetsGridViewFooterIden
 {
     NSInteger tag = cell.tag + 1;
     cell.tag = tag;
-
+    PHImageRequestOptions *options = self.picker.thumbnailRequestOptions;
     [CTBackgroundQueue addOperationWithBlock:^{
         [self.imageManager ctassetsPickerRequestImageForAsset:asset
                                                    targetSize:targetSize
                                                   contentMode:PHImageContentModeAspectFill
-                                                      options:self.picker.thumbnailRequestOptions
+                                                      options:options
                                                 resultHandler:^(UIImage *image, NSDictionary *info){
                                                     // Only update the image if the cell tag hasn't changed. Otherwise, the cell has been re-used.
                                                     if (cell.tag == tag) {

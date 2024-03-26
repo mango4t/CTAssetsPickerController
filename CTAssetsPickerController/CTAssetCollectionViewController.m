@@ -435,7 +435,7 @@
     NSUInteger count    = cell.thumbnailStacks.thumbnailViews.count;
     NSArray *assets     = [self posterAssetsFromAssetCollection:collection count:count];
     CGSize targetSize   = [self.picker imageSizeForContainerSize:self.picker.assetCollectionThumbnailSize];
-    
+    PHImageRequestOptions *options = self.picker.thumbnailRequestOptions;
     for (NSUInteger index = 0; index < count; index++)
     {
         CTAssetThumbnailView *thumbnailView = [cell.thumbnailStacks thumbnailAtIndex:index];
@@ -448,7 +448,7 @@
                 [self.imageManager ctassetsPickerRequestImageForAsset:asset
                                                            targetSize:targetSize
                                                           contentMode:PHImageContentModeAspectFill
-                                                              options:self.picker.thumbnailRequestOptions
+                                                              options:options
                                                         resultHandler:^(UIImage *image, NSDictionary *info){
                                                             dispatch_async(dispatch_get_main_queue(), ^{
                                                                 [thumbnailView setHidden:NO];
