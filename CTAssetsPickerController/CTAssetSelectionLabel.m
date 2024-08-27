@@ -174,7 +174,14 @@
     NSAssert(edgeY == NSLayoutAttributeTop || edgeY == NSLayoutAttributeBottom,
              @"Horizontal edge must be NSLayoutAttributeTop or NSLayoutAttributeBottom");
 
-    [self.superview removeConstraints:@[self.verticalConstraint, self.horizontalConstraint]];
+    NSMutableArray<NSLayoutConstraint*> *constraints = @[];
+    if (self.verticalConstraint) {
+        [constraints addObject:self.verticalConstraint];
+    }
+    if (self.horizontalConstraint) {
+        [constraints addObject:self.horizontalConstraint];
+    }
+    [self.superview removeConstraints:constraints];
     self.verticalConstraint   = [self autoPinEdgeToSuperviewEdge:(ALEdge)edgeX withInset:margin];
     self.horizontalConstraint = [self autoPinEdgeToSuperviewEdge:(ALEdge)edgeY withInset:margin];
 }
