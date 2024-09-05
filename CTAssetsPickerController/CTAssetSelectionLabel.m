@@ -175,15 +175,16 @@
              @"Horizontal edge must be NSLayoutAttributeTop or NSLayoutAttributeBottom");
 
     NSMutableArray<NSLayoutConstraint*> *constraints = @[];
-    if (self.verticalConstraint) {
+    if (!self.didSetupConstraints && self.verticalConstraint) {
         [constraints addObject:self.verticalConstraint];
     }
-    if (self.horizontalConstraint) {
+    if (!self.didSetupConstraints && self.horizontalConstraint) {
         [constraints addObject:self.horizontalConstraint];
     }
     [self.superview removeConstraints:constraints];
     self.verticalConstraint   = [self autoPinEdgeToSuperviewEdge:(ALEdge)edgeX withInset:margin];
     self.horizontalConstraint = [self autoPinEdgeToSuperviewEdge:(ALEdge)edgeY withInset:margin];
+    self.didSetupConstraints = YES;
 }
 
 /**
