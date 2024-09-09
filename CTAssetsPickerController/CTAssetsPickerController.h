@@ -36,6 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  A controller that allows picking multiple photos and videos from user's photo library.
  */
+NS_SWIFT_UI_ACTOR
 @interface CTAssetsPickerController : UIViewController
 
 /**
@@ -213,6 +214,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  The picked assets are `PHAsset` objects and contain only metadata. The underlying image or video data for any given asset might not be stored on the local device.
  *  You have to use `PHImageManager` object for loading image or video data associated with a `PHAsset`.
  */
+NS_SWIFT_UI_ACTOR
 @protocol CTAssetsPickerControllerDelegate <NSObject>
 
 
